@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			
+		}
+		h1{
+			text-align: center;
+		}
+		.wrap{
+			width: 1000px;
+			margin:50px auto;
+		}
+		
+		.con{
+			width: 500px;
+			margin: auto;
+		}
+		#tt div{
+			width: 300px;
+			height: 50px;
+			margin: auto;
+			border-bottom: 1px solid;
+			background: red
+		}
+		#tt{
+			width: 500px;
+			height: auto;
+			border: 1px solid;
+		}
+		
+	</style>
+</head>
+<body>
+<div class="wrap">
+	<div  class="con">
+		<h1>Hello word</h1>
+		<div id="tt">
+		</div>
+
+		<input type="text" name='names' id="text" required> 
+		<input type="text" id="mes">
+		<input type="submit" id="btn">
+	</div>
+</div>
+
+
+	<script>
+		$(function(){
+			
+			var val=$('#text').val(),
+				vau=$('#mes').val()
+			 //  ajax请求
+					$.ajax({
+					url:"http://localhost:3000",
+					type:"POST",
+					data:{
+						name:val,
+						message:vau
+					},
+					success:function(e){
+						console.log(e)
+						
+						var str=""
+						for(var i in e){
+							var t=e[i]
+							console.log(t)
+							for(var i in t){
+								str+="<div>"+"<h2>"+t[i].name+"</h2>"+"<p>"+t[i].message+"</p>"+"</div>"
+								
+							}
+						}
+						
+						$("#tt").html(str)
+					}
+						
+				})
+		
+			
+				// 添加
+			$('#btn').click(function(){
+	
+				// 获取value
+				var val=$('#text').val(),
+					vau=$('#mes').val()
+				console.log(val)
+				console.log(vau)
+				
+				// 判断是否为空
+				if (val=="" || vau=="") {
+					alert('请您输入所需内容');
+					return false;
+				 }else{
+					 //  ajax请求
+					$.ajax({
+					url:"http://localhost:3000/a",
+					type:"POST",
+					data:{
+						name:val,
+						message:vau
+					},
+					success:function(e){
+						console.log(e)
+						
+						var str=""
+						for(var i in e){
+							var t=e[i]
+							console.log(t)
+							
+							for(var i in t){
+								str+="<div>"+"<h2>"+t[i].name+"</h2>"+"<p>"+t[i].message+"</p>"+"</div>"
+							
+							}
+						}
+						
+						
+						$('#tt').html(str)
+					}
+						
+				})
+				 }  
+			
+					
+			})
+			
+			// 删除
+			
+				$("#tt").delegate('div','click',function(){
+					$(this).hide();
+					$.ajax({
+						url:"http://localhost:3000/del",
+						type:"POST",
+						data:{
+							del:$(this).children('p').text()
+						},
+						success:function(data){
+							console.log(data)
+						}
+					})
+				})
+			
+			
+			
+			
+				
+			
+})
+		
+
+	</script>
+</body>
+</html>
